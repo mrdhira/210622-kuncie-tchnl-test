@@ -23,9 +23,9 @@ type OrderProducts struct {
 	PromoType          dao.PromoType `json:"promo_type"`
 }
 
-// daoToDto function converts a dao struct to dto struct
-func (dto *Orders) DaoToDto(dao dao.Orders) {
-	dto = &Orders{
+// OrdersDaoToDto function converts a dao struct to dto struct
+func OrdersDaoToDto(dao dao.Orders) Orders {
+	dto := Orders{
 		UserID:        dao.UserID,
 		FinalAmount:   dao.FinalAmount,
 		OrderProducts: make([]OrderProducts, 0),
@@ -46,4 +46,6 @@ func (dto *Orders) DaoToDto(dao dao.Orders) {
 			PromoType:          v.PromoType,
 		})
 	}
+
+	return dto
 }

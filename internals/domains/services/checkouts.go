@@ -217,8 +217,7 @@ func (s *CheckoutServices) Checkouts(ctx context.Context, data dto.Checkouts) (d
 		return dto.Orders{}, err
 	}
 
-	var dtoOrders dto.Orders
-	dtoOrders.DaoToDto(orders)
+	dtoOrders := dto.OrdersDaoToDto(orders)
 
 	return dtoOrders, nil
 }

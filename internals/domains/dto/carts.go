@@ -31,9 +31,9 @@ type DeleteCartProducts struct {
 	ProductID uint `json:"product_id"`
 }
 
-// daoToDto function converts a dao struct to dto struct
-func (dto *Carts) DaoToDto(dao dao.Carts) {
-	dto = &Carts{
+// CartsDaoToDto function converts a dao struct to dto struct
+func CartsDaoToDto(dao dao.Carts) Carts {
+	dto := Carts{
 		UserID:       dao.UserID,
 		TotalPrice:   dao.TotalPrice,
 		CartProducts: make([]CartProducts, 0),
@@ -46,4 +46,6 @@ func (dto *Carts) DaoToDto(dao dao.Carts) {
 			TotalPrice: v.TotalPrice,
 		})
 	}
+
+	return dto
 }

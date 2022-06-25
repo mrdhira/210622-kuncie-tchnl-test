@@ -31,8 +31,7 @@ func (s *CartServices) GetCarts(ctx context.Context, userID uint) (dto.Carts, er
 		return dto.Carts{}, err
 	}
 
-	var dtoCarts dto.Carts
-	dtoCarts.DaoToDto(carts)
+	dtoCarts := dto.CartsDaoToDto(carts)
 
 	return dtoCarts, nil
 }
@@ -63,8 +62,7 @@ func (s *CartServices) CreateCartProducts(ctx context.Context, userID uint, data
 		return dto.Carts{}, err
 	}
 
-	var dtoCarts dto.Carts
-	dtoCarts.DaoToDto(carts)
+	dtoCarts := dto.CartsDaoToDto(carts)
 
 	return dtoCarts, nil
 }
@@ -95,8 +93,7 @@ func (s *CartServices) UpdateCartProducts(ctx context.Context, userID uint, data
 		return dto.Carts{}, err
 	}
 
-	var dtoCarts dto.Carts
-	dtoCarts.DaoToDto(carts)
+	dtoCarts := dto.CartsDaoToDto(carts)
 
 	return dtoCarts, nil
 }
