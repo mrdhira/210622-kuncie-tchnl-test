@@ -1,0 +1,3 @@
+http_configs:
+postgres_configs:
+  dsn: host=localhost user=dhirawigata password= dbname=kuncie_tchnl_test port=5432 sslmode=disable TimeZone=Asia/Jakarta
