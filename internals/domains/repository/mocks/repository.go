@@ -10,7 +10,6 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 	dao "github.com/mrdhira/210622-kuncie-tchnl-test/internals/domains/dao"
-	gorm "gorm.io/gorm"
 )
 
 // MockIRepository is a mock of IRepository interface.
@@ -36,32 +35,32 @@ func (m *MockIRepository) EXPECT() *MockIRepositoryMockRecorder {
 	return m.recorder
 }
 
-// Begin mocks base method.
-func (m *MockIRepository) Begin() *gorm.DB {
+// BeginTrx mocks base method.
+func (m *MockIRepository) BeginTrx(ctx context.Context) context.Context {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Begin")
-	ret0, _ := ret[0].(*gorm.DB)
+	ret := m.ctrl.Call(m, "BeginTrx", ctx)
+	ret0, _ := ret[0].(context.Context)
 	return ret0
 }
 
-// Begin indicates an expected call of Begin.
-func (mr *MockIRepositoryMockRecorder) Begin() *gomock.Call {
+// BeginTrx indicates an expected call of BeginTrx.
+func (mr *MockIRepositoryMockRecorder) BeginTrx(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Begin", reflect.TypeOf((*MockIRepository)(nil).Begin))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BeginTrx", reflect.TypeOf((*MockIRepository)(nil).BeginTrx), ctx)
 }
 
-// Commit mocks base method.
-func (m *MockIRepository) Commit() *gorm.DB {
+// CommitTrx mocks base method.
+func (m *MockIRepository) CommitTrx(ctx context.Context) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Commit")
-	ret0, _ := ret[0].(*gorm.DB)
+	ret := m.ctrl.Call(m, "CommitTrx", ctx)
+	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// Commit indicates an expected call of Commit.
-func (mr *MockIRepositoryMockRecorder) Commit() *gomock.Call {
+// CommitTrx indicates an expected call of CommitTrx.
+func (mr *MockIRepositoryMockRecorder) CommitTrx(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Commit", reflect.TypeOf((*MockIRepository)(nil).Commit))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CommitTrx", reflect.TypeOf((*MockIRepository)(nil).CommitTrx), ctx)
 }
 
 // CreateOrders mocks base method.
@@ -168,18 +167,18 @@ func (mr *MockIRepositoryMockRecorder) InsertOrUpdateCartProducts(ctx, cartProdu
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertOrUpdateCartProducts", reflect.TypeOf((*MockIRepository)(nil).InsertOrUpdateCartProducts), ctx, cartProducts)
 }
 
-// Rollback mocks base method.
-func (m *MockIRepository) Rollback() *gorm.DB {
+// RollbackTrx mocks base method.
+func (m *MockIRepository) RollbackTrx(ctx context.Context) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Rollback")
-	ret0, _ := ret[0].(*gorm.DB)
+	ret := m.ctrl.Call(m, "RollbackTrx", ctx)
+	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// Rollback indicates an expected call of Rollback.
-func (mr *MockIRepositoryMockRecorder) Rollback() *gomock.Call {
+// RollbackTrx indicates an expected call of RollbackTrx.
+func (mr *MockIRepositoryMockRecorder) RollbackTrx(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Rollback", reflect.TypeOf((*MockIRepository)(nil).Rollback))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RollbackTrx", reflect.TypeOf((*MockIRepository)(nil).RollbackTrx), ctx)
 }
 
 // UpdateProductsQty mocks base method.

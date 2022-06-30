@@ -3,6 +3,7 @@ package dto
 import "github.com/mrdhira/210622-kuncie-tchnl-test/internals/domains/dao"
 
 type Orders struct {
+	ID            uint            `json:"id"`
 	UserID        uint            `json:"user_id"`
 	FinalAmount   float64         `json:"total_price"`
 	OrderProducts []OrderProducts `json:"order_products"`
@@ -26,6 +27,7 @@ type OrderProducts struct {
 // OrdersDaoToDto function converts a dao struct to dto struct
 func OrdersDaoToDto(dao dao.Orders) Orders {
 	dto := Orders{
+		ID:            dao.ID,
 		UserID:        dao.UserID,
 		FinalAmount:   dao.FinalAmount,
 		OrderProducts: make([]OrderProducts, 0),

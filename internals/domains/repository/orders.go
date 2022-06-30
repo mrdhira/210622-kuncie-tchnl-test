@@ -9,7 +9,7 @@ import (
 
 // CreateOrders func
 func (r *Repository) CreateOrders(ctx context.Context, order dao.Orders) (dao.Orders, error) {
-	db := r.client.WithContext(ctx)
+	db := r.getConnection(ctx)
 	err := db.Table("orders").Create(&order).Error
 	if err != nil {
 		log.Printf("error when create orders: %v\n", err)

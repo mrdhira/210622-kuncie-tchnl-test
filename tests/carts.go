@@ -1,19 +1,11 @@
 package tests
 
 import (
-	"time"
-
 	"github.com/mrdhira/210622-kuncie-tchnl-test/internals/domains/dao"
 	"github.com/mrdhira/210622-kuncie-tchnl-test/internals/domains/dto"
-	"gorm.io/gorm"
 )
 
 var (
-	BASE_GORM_MODEL = gorm.Model{
-		ID:        1,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-	}
 	CARTS = dao.Carts{
 		Model:        BASE_GORM_MODEL,
 		UserID:       1,

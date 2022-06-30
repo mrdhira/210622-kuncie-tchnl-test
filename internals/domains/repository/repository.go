@@ -7,6 +7,10 @@ import (
 	"gorm.io/gorm"
 )
 
+type ctxKey string
+
+const trxKey = ctxKey("trx")
+
 // Repository struct
 type Repository struct {
 	client *gorm.DB
@@ -19,23 +23,37 @@ func InitRepository(client *gorm.DB) *Repository {
 	}
 }
 
-func (r *Repository) Begin() *gorm.DB {
-	return r.client.Begin()
+// getConnection func
+func (r *Repository) getConnection(ctx context.Context) *gorm.DB {
+	value := ctx.Value(trxKey).(*gorm.DB)
+	if value != nil {
+		return value.WithContext(ctx)
+	}
+	return r.client.WithContext(ctx)
 }
 
-func (r *Repository) Commit() *gorm.DB {
-	return r.client.Commit()
+// BeginTrx func
+func (r *Repository) BeginTrx(ctx context.Context) context.Context {
+	return context.WithValue(ctx, trxKey, r.client.Begin())
 }
 
-func (r *Repository) Rollback() *gorm.DB {
-	return r.client.Rollback()
+// CommitTrx func
+func (r *Repository) CommitTrx(ctx context.Context) error {
+	value := ctx.Value(trxKey).(*gorm.DB)
+	return value.Commit().Error
+}
+
+// RollbackTrx func
+func (r *Repository) RollbackTrx(ctx context.Context) error {
+	value := ctx.Value(trxKey).(*gorm.DB)
+	return value.Rollback().Error
 }
 
 // IRepository interface
 type IRepository interface {
-	Begin() *gorm.DB
-	Commit() *gorm.DB
-	Rollback() *gorm.DB
+	BeginTrx(ctx context.Context) context.Context
+	CommitTrx(ctx context.Context) error
+	RollbackTrx(ctx context.Context) error
 
 	// Carts
 	FindOrCreateCarts(ctx context.Context, carts dao.Carts) (dao.Carts, error)

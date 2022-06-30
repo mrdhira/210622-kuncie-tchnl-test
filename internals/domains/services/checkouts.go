@@ -135,38 +135,39 @@ func (s *CheckoutServices) checkPromos(ctx context.Context, orders dao.Orders) (
 
 // createOrder func
 func (s *CheckoutServices) createOrder(ctx context.Context, orders dao.Orders) (dao.Orders, error) {
-	repositoryTrans := repository.InitRepository(s.repository.Begin())
-
-	var err error
-	defer func(err error) {
-		if err != nil {
-			repositoryTrans.Rollback()
-		} else {
-			repositoryTrans.Commit()
-		}
-	}(err)
+	ctx = s.repository.BeginTrx(ctx)
 
 	// check if ordered product quantity is valid with master product quantity
 	for _, orderProducts := range orders.OrderProducts {
-		product, err := repositoryTrans.GetProducts(ctx, orderProducts.ProductID)
+		product, err := s.repository.GetProducts(ctx, orderProducts.ProductID)
 		if err != nil {
+			_ = s.repository.RollbackTrx(ctx)
 			return dao.Orders{}, err
 		}
 
 		// if not matched, return error
-		if product.Quantity != orderProducts.Quantity {
-			return dao.Orders{}, errors.New("product quantity not match")
+		if orderProducts.Quantity > product.Quantity {
+			_ = s.repository.RollbackTrx(ctx)
+			return dao.Orders{}, errors.New("order product quantity is too much")
 		} else {
 			// if matched, update master product quantity
-			err := repositoryTrans.UpdateProductsQty(ctx, orderProducts.ProductID, product.Quantity-orderProducts.Quantity)
+			err := s.repository.UpdateProductsQty(ctx, orderProducts.ProductID, product.Quantity-orderProducts.Quantity)
 			if err != nil {
+				_ = s.repository.RollbackTrx(ctx)
 				return dao.Orders{}, err
 			}
 		}
 	}
 
-	orders, err = s.repository.CreateOrders(ctx, orders)
+	orders, err := s.repository.CreateOrders(ctx, orders)
 	if err != nil {
+		_ = s.repository.RollbackTrx(ctx)
+		return dao.Orders{}, err
+	}
+
+	err = s.repository.CommitTrx(ctx)
+	if err != nil {
+		_ = s.repository.RollbackTrx(ctx)
 		return dao.Orders{}, err
 	}
 
@@ -212,10 +213,7 @@ func (s *CheckoutServices) Checkouts(ctx context.Context, data dto.Checkouts) (d
 	}
 
 	// clear cart products that has been checkout
-	err = s.repository.DeleteCartProducts(ctx, data.CartID, productIDs)
-	if err != nil {
-		return dto.Orders{}, err
-	}
+	go s.repository.DeleteCartProducts(context.Background(), data.CartID, productIDs)
 
 	dtoOrders := dto.OrdersDaoToDto(orders)
 

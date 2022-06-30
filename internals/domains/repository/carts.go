@@ -10,7 +10,7 @@ import (
 
 // FindOrCreateCarts func
 func (r *Repository) FindOrCreateCarts(ctx context.Context, carts dao.Carts) (dao.Carts, error) {
-	db := r.client.WithContext(ctx)
+	db := r.getConnection(ctx)
 	err := db.Table("carts").FirstOrCreate(&carts, dao.Carts{UserID: carts.UserID}).Error
 	if err != nil {
 		log.Printf("error when first or create cart: %v\n", err)
@@ -23,7 +23,7 @@ func (r *Repository) FindOrCreateCarts(ctx context.Context, carts dao.Carts) (da
 // FindAllCartProducts func
 func (r *Repository) FindAllCartProducts(ctx context.Context, cartID uint) ([]dao.CartProducts, error) {
 	var cartProducts []dao.CartProducts
-	db := r.client.WithContext(ctx)
+	db := r.getConnection(ctx)
 	err := db.Table("cart_products").Where("cart_id = ?", cartID).Find(&cartProducts).Error
 	if err != nil {
 		log.Printf("error when getting cart products: %v\n", err)
@@ -35,7 +35,7 @@ func (r *Repository) FindAllCartProducts(ctx context.Context, cartID uint) ([]da
 
 // InsertOrUpdateCartProducts func
 func (r *Repository) InsertOrUpdateCartProducts(ctx context.Context, cartProducts dao.CartProducts) (dao.CartProducts, error) {
-	db := r.client.WithContext(ctx)
+	db := r.getConnection(ctx)
 	err := db.Table("cart_products").Clauses(
 		clause.OnConflict{
 			Columns:   []clause.Column{{Name: "cart_id"}, {Name: "product_id"}},
@@ -52,7 +52,7 @@ func (r *Repository) InsertOrUpdateCartProducts(ctx context.Context, cartProduct
 
 // DeleteCartProducts func
 func (r *Repository) DeleteCartProducts(ctx context.Context, cart_id uint, productIDs []uint) error {
-	db := r.client.WithContext(ctx)
+	db := r.getConnection(ctx)
 	err := db.
 		Table("cart_products").
 		Where("cart_id = ?", cart_id).

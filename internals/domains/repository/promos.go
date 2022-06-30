@@ -10,7 +10,7 @@ import (
 // GetPromos func
 func (r *Repository) GetPromos(ctx context.Context) ([]dao.Promos, error) {
 	var promos []dao.Promos
-	db := r.client.WithContext(ctx)
+	db := r.getConnection(ctx)
 	err := db.Table("promos").Find(&promos).Error
 	if err != nil {
 		log.Printf("error when getting promos: %v\n", err)

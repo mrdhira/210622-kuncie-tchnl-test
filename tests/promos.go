@@ -26,14 +26,14 @@ var (
 	}
 	PROMO_GOOGLE_HOME_BUY_2_GET_3 = dao.Promos{
 		Model: gorm.Model{
-			ID:        1,
+			ID:        2,
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
 		},
 		Type: dao.PromoTypeFixed,
 		Threshold: dao.PromoThreshold{
 			ProductID:         PRODUCT_GOOGLE_HOME.ID,
-			MinimumProductQty: 2,
+			MinimumProductQty: 3,
 		},
 		Gift: dao.PromoGift{
 			FixedProductID:      PRODUCT_GOOGLE_HOME.ID,
@@ -42,7 +42,7 @@ var (
 	}
 	PROMO_ALEXA_SPEAKER_MIN_BUY_3_GET_DISCOUNT = dao.Promos{
 		Model: gorm.Model{
-			ID:        1,
+			ID:        3,
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
 		},
@@ -60,5 +60,4 @@ var (
 		PROMO_GOOGLE_HOME_BUY_2_GET_3,
 		PROMO_ALEXA_SPEAKER_MIN_BUY_3_GET_DISCOUNT,
 	}
-	NO_PROMOS = []dao.Promos{}
 )
